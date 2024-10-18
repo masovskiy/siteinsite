@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра: Создай свой сайт</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .editor, .preview, .task {
+            width: 80%;
+            margin: 20px 0;
+        }
+        .editor {
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .editor textarea {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 10px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .preview {
+            background: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .task {
+            padding: 20px;
+            background: #eee;
+        }
+    </style>
+</head>
+<body>
+    <h1>Игра: Создай свой сайт</h1>
+
+    <div class="task">
+        <p>Задание: Создайте заголовок &lt;h1&gt; с текстом "Привет, мир!" и сделайте его зеленым с помощью CSS.</p>
+    </div>
+
+    <div class="editor">
+        <textarea id="htmlCode" placeholder="Напишите HTML код здесь"></textarea>
+        <textarea id="cssCode" placeholder="Напишите CSS код здесь"></textarea>
+        <textarea id="jsCode" placeholder="Напишите JavaScript код здесь (если нужно)"></textarea>
+        <button onclick="updatePreview()">Обновить превью</button>
+    </div>
+
+    <div class="preview">
+        <h2>Превью:</h2>
+        <iframe id="previewFrame" style="width: 100%; height: 300px;"></iframe>
+    </div>
+
+    <script>
+        function updatePreview() {
+            const html = document.getElementById('htmlCode').value;
+            const css = document.getElementById('cssCode').value;
+            const js = document.getElementById('jsCode').value;
+
+            const previewFrame = document.getElementById('previewFrame').contentWindow.document;
+            previewFrame.open();
+            previewFrame.write(`
+                <style>${css}</style>
+                ${html}
+                <script>${js}</script>
+            `);
+            previewFrame.close();
+        }
+    </script>
+</body>
+</html>
