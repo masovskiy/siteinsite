@@ -172,8 +172,10 @@
 
         // Функция обновления задания
         function updateTask() {
-            const taskText = levels[currentLevel].task;
-            document.getElementById("task").textContent = taskText;
+            const taskData = levels[currentLevel];
+            document.getElementById("task").textContent = taskData.task;
+            document.getElementById("htmlCode").value = taskData.htmlSolution || ""; // Очистка HTML поля при переходе на уровень
+            document.getElementById("jsCode").value = taskData.jsSolution || ""; // Очистка JS поля при переходе на уровень
         }
 
         // Функция обновления кода в превью
@@ -181,7 +183,7 @@
             const htmlCode = document.getElementById("htmlCode").value;
             const jsCode = document.getElementById("jsCode").value;
             const iframe = document.getElementById("previewFrame");
-            iframe.srcdoc = <!DOCTYPE html><html><head><title>Preview</title></head><body>${htmlCode}<script>${jsCode}<\/script></body></html>;
+            iframe.srcdoc = `<!DOCTYPE html><html><head><title>Preview</title></head><body>${htmlCode}<script>${jsCode}</script></body></html>`;
         }
 
         // Обработчик события запуска
@@ -191,6 +193,8 @@
         document.getElementById("jsToggle").addEventListener("click", () => {
             const jsCodeContainer = document.getElementById("jsCodeContainer");
             jsCodeContainer.style.display = jsCodeContainer.style.display === "none" ? "block" : "none";
+            const jsToggleBtn = document.getElementById("jsToggle");
+            jsToggleBtn.textContent = jsCodeContainer.style.display === "none" ? "Показать JavaScript" : "Скрыть JavaScript"; // Обновляем текст кнопки
         });
 
         // Обработчик события следующего уровня
