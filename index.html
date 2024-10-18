@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сайт в сайте</title>
+    <title>SiteInSite: Создай свой сайт</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #3b82f6, #9333ea);
             margin: 0;
             padding: 0;
             display: flex;
@@ -15,57 +15,132 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
+            color: #fff;
         }
-        .editor, .preview, .task {
-            width: 80%;
+        h1 {
+            font-size: 3em;
             margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 800px;
+            color: #333;
+        }
+        .task {
+            background: #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 1.2em;
         }
         .editor {
             display: flex;
             flex-direction: column;
-            background: #fff;
-            padding: 10px;
-            border: 1px solid #ccc;
         }
-        .editor textarea {
+        textarea {
             width: 100%;
-            height: 150px;
-            margin-bottom: 10px;
-            font-family: monospace;
+            height: 100px;
+            margin: 10px 0;
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
             font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            resize: none;
+            background: #f3f4f6;
         }
         .preview {
-            background: #fff;
+            background: #f9fafb;
             padding: 20px;
-            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        .task {
-            padding: 20px;
-            background: #eee;
+        button {
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .level {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .level p {
+            margin: 0;
         }
     </style>
-    <h1>SiteInSite - игра для изучения азов html, js и css!</h1>
 </head>
 <body>
+    <h1>SiteInSite - Создай свой сайт</h1>
 
+    <div class="container">
+        <div class="task" id="task">
+            <!-- Задание будет обновляться через JavaScript -->
+        </div>
 
-    <div class="task">
-        <p>Задание: Создайте заголовок &lt;h1&gt; с текстом "Привет, мир!" и сделайте его зеленым с помощью CSS.</p>
-    </div>
+        <div class="editor">
+            <textarea id="htmlCode" placeholder="Напишите HTML код здесь"></textarea>
+            <textarea id="cssCode" placeholder="Напишите CSS код здесь"></textarea>
+            <textarea id="jsCode" placeholder="Напишите JavaScript код здесь (если нужно)"></textarea>
+            <button onclick="updatePreview()">Обновить превью</button>
+        </div>
 
-    <div class="editor">
-        <textarea id="htmlCode" placeholder="Напишите HTML код здесь"></textarea>
-        <textarea id="cssCode" placeholder="Напишите CSS код здесь"></textarea>
-        <textarea id="jsCode" placeholder="Напишите JavaScript код здесь (если нужно)"></textarea>
-        <button onclick="updatePreview()">Обновить превью</button>
-    </div>
+        <div class="preview">
+            <h2>Превью:</h2>
+            <iframe id="previewFrame" style="width: 100%; height: 300px;"></iframe>
+        </div>
 
-    <div class="preview">
-        <h2>Превью:</h2>
-        <iframe id="previewFrame" style="width: 100%; height: 300px;"></iframe>
+        <div class="level">
+            <p id="levelText">Уровень: 1</p>
+            <button onclick="nextLevel()">Следующий уровень</button>
+        </div>
     </div>
 
     <script>
+        let level = 1;
+        const tasks = [
+            {
+                task: 'Задание 1: Создайте заголовок &lt;h1&gt; с текстом "Привет, мир!" и сделайте его зеленым с помощью CSS.',
+                html: '',
+                css: '',
+                js: ''
+            },
+            {
+                task: 'Задание 2: Создайте абзац &lt;p&gt; с текстом "Это абзац", сделайте его текст жирным и синего цвета.',
+                html: '',
+                css: '',
+                js: ''
+            },
+            {
+                task: 'Задание 3: Создайте кнопку, которая меняет цвет фона на красный при клике (используйте JavaScript).',
+                html: '',
+                css: '',
+                js: ''
+            }
+        ];
+
+        function loadTask() {
+            document.getElementById('task').innerHTML = tasks[level - 1].task;
+            document.getElementById('htmlCode').value = tasks[level - 1].html;
+            document.getElementById('cssCode').value = tasks[level - 1].css;
+            document.getElementById('jsCode').value = tasks[level - 1].js;
+            document.getElementById('levelText').textContent = `Уровень: ${level}`;
+        }
+
         function updatePreview() {
             const html = document.getElementById('htmlCode').value;
             const css = document.getElementById('cssCode').value;
@@ -76,9 +151,25 @@
             previewFrame.write(`
                 <style>${css}</style>
                 ${html}
-                <script>${js}</script>`);
+                <script>${js}</script>
+            `);
             previewFrame.close();
+
+            tasks[level - 1].html = html;
+            tasks[level - 1].css = css;
+            tasks[level - 1].js = js;
         }
+
+        function nextLevel() {
+            if (level < tasks.length) {
+                level++;
+                loadTask();
+            } else {
+                alert('Поздравляем! Вы завершили все уровни.');
+            }
+        }
+
+        loadTask();
     </script>
 </body>
 </html>
