@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiteInSite: Создай свой сайт</title>
+    <title>Игра: Создай свой сайт</title>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -16,6 +16,7 @@
             justify-content: center;
             height: 100vh;
             color: #fff;
+            overflow: hidden;
         }
         h1 {
             font-size: 3em;
@@ -27,25 +28,31 @@
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            width: 80%;
+            width: 90%;
             max-width: 800px;
             color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .task {
             background: #e5e7eb;
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 20px;
-            font-size: 1.4em;
+            font-size: 1.2em;
             font-weight: bold;
+            text-align: center;
+            width: 100%;
         }
         .editor {
             display: flex;
             flex-direction: column;
+            width: 100%;
         }
         textarea {
             width: 100%;
-            height: 120px;
+            height: 100px;
             margin: 10px 0;
             padding: 15px;
             font-family: 'Courier New', Courier, monospace;
@@ -55,12 +62,16 @@
             resize: none;
             background: #f3f4f6;
         }
+        #jsCodeContainer {
+            display: none;
+        }
         .preview {
             background: #f9fafb;
             padding: 20px;
             border-radius: 8px;
             margin-top: 20px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
         }
         button {
             background: #3b82f6;
@@ -71,6 +82,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background 0.3s;
+            margin: 10px;
         }
         button:hover {
             background: #2563eb;
@@ -79,15 +91,27 @@
             margin-top: 20px;
             display: flex;
             justify-content: space-between;
+            width: 100%;
         }
         .level p {
             margin: 0;
             font-size: 1.2em;
         }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+        #jsToggle {
+            background: #10b981;
+        }
+        #jsToggle:hover {
+            background: #059669;
+        }
     </style>
 </head>
 <body>
-    <h1>SiteInSite: Создай свой сайт</h1>
+    <h1>Игра: Создай свой сайт</h1>
 
     <div class="container">
         <div class="task" id="task">
@@ -97,7 +121,13 @@
         <div class="editor">
             <textarea id="htmlCode" placeholder="Напишите HTML код здесь"></textarea>
             <textarea id="cssCode" placeholder="Напишите CSS код здесь"></textarea>
-            <button onclick="updatePreview()">Обновить превью</button>
+            <div id="jsCodeContainer">
+                <textarea id="jsCode" placeholder="Напишите JavaScript код здесь"></textarea>
+            </div>
+            <div class="buttons">
+                <button onclick="updatePreview()">Обновить превью</button>
+                <button id="jsToggle" onclick="toggleJS()">Показать JS</button>
+            </div>
         </div>
 
         <div class="preview">
@@ -106,6 +136,7 @@
         </div>
 
         <div class="level">
+            <button onclick="prevLevel()">Предыдущий уровень</button>
             <p id="levelText">Уровень: 1</p>
             <button onclick="nextLevel()">Следующий уровень</button>
         </div>
@@ -118,16 +149,19 @@
                 task: 'Задание 1: Создайте заголовок &lt;h1&gt; с текстом "Привет, мир!" и сделайте его зеленым с помощью CSS.',
                 html: '',
                 css: '',
+                js: ''
             },
             {
                 task: 'Задание 2: Создайте абзац &lt;p&gt; с текстом "Это абзац", сделайте его жирным и синего цвета.',
                 html: '',
                 css: '',
+                js: ''
             },
             {
-                task: 'Задание 3: Создайте кнопку, которая меняет цвет текста на красный при нажатии.',
+                task: 'Задание 3: Создайте кнопку, которая меняет цвет текста на красный при нажатии (используйте JavaScript).',
                 html: '',
                 css: '',
+                js: ''
             }
         ];
 
@@ -135,23 +169,27 @@
             document.getElementById('task').innerHTML = tasks[level - 1].task;
             document.getElementById('htmlCode').value = tasks[level - 1].html;
             document.getElementById('cssCode').value = tasks[level - 1].css;
+            document.getElementById('jsCode').value = tasks[level - 1].js;
             document.getElementById('levelText').textContent = `Уровень: ${level}`;
         }
 
         function updatePreview() {
             const html = document.getElementById('htmlCode').value;
             const css = document.getElementById('cssCode').value;
+            const js = document.getElementById('jsCode').value;
 
             const previewFrame = document.getElementById('previewFrame').contentWindow.document;
             previewFrame.open();
             previewFrame.write(`
                 <style>${css}</style>
                 ${html}
+                <script>${js}</script>
             `);
             previewFrame.close();
 
             tasks[level - 1].html = html;
             tasks[level - 1].css = css;
+            tasks[level - 1].js = js;
         }
 
         function nextLevel() {
@@ -160,6 +198,25 @@
                 loadTask();
             } else {
                 alert('Поздравляем! Вы завершили все уровни.');
+            }
+        }
+
+        function prevLevel() {
+            if (level > 1) {
+                level--;
+                loadTask();
+            }
+        }
+
+        function toggleJS() {
+            const jsContainer = document.getElementById('jsCodeContainer');
+            const button = document.getElementById('jsToggle');
+            if (jsContainer.style.display === 'none') {
+                jsContainer.style.display = 'block';
+                button.textContent = 'Скрыть JS';
+            } else {
+                jsContainer.style.display = 'none';
+                button.textContent = 'Показать JS';
             }
         }
 
