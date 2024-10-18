@@ -3,209 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIteInSite: Создай свой сайт</title>
+    <title>SiteInFrog: Сайт в Лягушке</title>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #3b82f6, #9333ea);
-            margin: 0;
-            padding: 0;
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .game-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            color: #fff;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .froggy {
+            display: flex;
+            width: 250px;
+            height: 150px;
+            background-color: #80c84c;
+            border-radius: 10px;
             overflow: hidden;
         }
-        h1 {
-            font-size: 2.5em;
-            margin: 20px 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+
+        .head {
+            width: 60%;
+            height: 100%;
+            background-color: #6aa84f;
+            border-radius: 10px 0 0 10px;
+            position: relative;
         }
-        .container {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 800px;
-            color: #333;
+
+        .eye {
+            width: 20px;
+            height: 20px;
+            background-color: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: 25px;
+        }
+
+        .eye.left {
+            left: 20px;
+        }
+
+        .eye.right {
+            right: 20px;
+        }
+
+        .pupil {
+            width: 10px;
+            height: 10px;
+            background-color: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+        }
+
+        .pupil.left {
+            left: 5px;
+        }
+
+        .pupil.right {
+            right: 5px;
+        }
+
+        .mouth {
+            width: 30px;
+            height: 10px;
+            background-color: #000;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .body {
+            width: 40%;
+            height: 100%;
+            background-color: #6aa84f;
+        }
+
+        .leg {
+            width: 20px;
+            height: 40px;
+            background-color: #80c84c;
+            border-radius: 10px;
+            position: relative;
+            margin: 0 5px;
+        }
+
+        .leg:before,
+        .leg:after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #80c84c;
+                        border-radius: 50%;
+        }
+
+        .leg:before {
+            bottom: 0;
+            left: 5px;
+        }
+
+        .leg:after {
+            top: 0;
+            right: 5px;
+        }
+
+        .legs {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-sizing: border-box;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
         }
-        .task {
-            background: #e5e7eb;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 1.2em;
-            font-weight: bold;
+
+        .level-info {
+            margin-top: 20px;
             text-align: center;
-            width: 100%;
-            box-sizing: border-box;
         }
-        .editor {
+
+        .level-info h2 {
+            margin-bottom: 10px;
+        }
+
+        .level-info .description {
+            margin-bottom: 15px;
+        }
+
+        .level-info button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .level-info button:hover {
+            background-color: #45a049;
+        }
+
+        .code-editor {
+            margin-top: 20px;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            width: 100%;
-            box-sizing: border-box;
         }
-        textarea {
+
+        .code-editor textarea {
             width: 100%;
             height: 100px;
-            margin: 10px 0;
             padding: 10px;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: monospace;
             font-size: 14px;
-            border-radius: 8px;
             border: 1px solid #ccc;
-            resize: none;
-            background: #f3f4f6;
-            box-sizing: border-box;
+            resize: vertical;
+            background-color: #f0f0f0;
         }
-        #jsCodeContainer {
-            display: none;
-        }
-        .preview {
-            background: #f9fafb;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+        .code-editor .code-preview {
+            margin-top: 10px;
             width: 100%;
-            box-sizing: border-box;
-        }
-        button {
-            background: #3b82f6;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            font-size: 1em;
-            border-radius: 8px;
-                        cursor: pointer;
-            transition: background 0.3s;
-            margin: 10px 5px;
-        }
-        button:hover {
-            background: #2563eb;
-        }
-        .level {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .level p {
-            margin: 0;
-            font-size: 1.2em;
-        }
-        .buttons {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        #jsToggle {
-            background: #10b981;
-        }
-        #jsToggle:hover {
-            background: #059669;
-        }
-        iframe {
-            border: none;
-            width: 100%;
-            height: 300px;
+            height: 200px;
+            border: 1px solid #ccc;
+            background-color: #f0f0f0;
+            overflow: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <h1>SiteInSite: Создай свой сайт</h1>
-
-    <div class="container">
-        <div class="task" id="task">
-            <!-- Задание будет обновляться через JavaScript -->
+    <div class="game-container">
+        <h2>SiteInFrog: Сайт в Лягушке</h2>
+        <div class="level-info">
+            <h2 id="level-title">Уровень 1</h2>
+            <div class="description" id="level-description"></div>
+            <button id="next-level">Следующий уровень</button>
         </div>
 
-        <div class="editor">
-            <textarea id="htmlCode" placeholder="Введите HTML код..."></textarea>
-            <div id="jsCodeContainer">
-                <textarea id="jsCode" placeholder="Введите JavaScript код..."></textarea>
+        <div class="froggy">
+            <div class="head">
+                <div class="eye left">
+                    <div class="pupil left"></div>
+                </div>
+                <div class="eye right">
+                    <div class="pupil right"></div>
+                </div>
+                <div class="mouth"></div>
+            </div>
+            <div class="body"></div>
+            <div class="legs">
+                <div class="leg"></div>
+                <div class="leg"></div>
             </div>
         </div>
 
-        <div class="preview">
-            <iframe id="previewFrame" srcdoc=""></iframe>
-        </div>
-
-        <div class="buttons">
-            <button id="runButton">Запустить</button>
-            <button id="jsToggle">Показать JavaScript</button>
-        </div>
-
-        <div class="level">
-            <p>Уровень: <span id="currentLevel">1</span></p>
-            <button id="nextLevel">Следующий уровень</button>
+        <div class="code-editor">
+            <textarea id="html-code" placeholder="HTML код"></textarea>
+            <div class="code-preview" id="html-preview"></div>
+            <textarea id="css-code" placeholder="CSS код"></textarea>
+            <div class="code-preview" id="css-preview"></div>
         </div>
     </div>
 
     <script>
-        // Данные игры: уровни, задания, решения
         const levels = [
             {
-                task: "Создайте заголовок h1 с текстом 'Привет, мир!'",
-                htmlSolution: "<h1>Привет, мир!</h1>",
-                jsSolution: ""
+                title: "Уровень 1",
+                description: "Сделайте голову лягушки зеленой с помощью CSS.",
+                htmlSolution: `
+                    <div class="froggy">
+                        <div class="head" style="background-color: green;">
+                            <div class="eye left">
+                                <div class="pupil left"></div>
+                            </div>
+                            <div class="eye right">
+                                <div class="pupil right"></div>
+                            </div>
+                            <div class="mouth"></div>
+                        </div>
+                        <div class="body"></div>
+                        <div class="legs">
+                            <div class="leg"></div>
+                            <div class="leg"></div>
+                        </div>
+                    </div>
+                `,
+                cssSolution: ``
             },
             {
-                task: "Создайте абзац с текстом 'Это мой первый сайт!'",
-                htmlSolution: "<p>Это мой первый сайт!</p>",
-                jsSolution: ""
+                title: "Уровень 2",
+                description: "Сделайте тело лягушки красным с помощью CSS.",
+                htmlSolution: `
+                    <div class="froggy">
+                        <div class="head">
+                            <div class="eye left">
+                                <div class="pupil left"></div>
+                            </div>
+                            <div class="eye right">
+                                <div class="pupil right"></div>
+                            </div>
+                            <div class="mouth"></div>
+                        </div>
+                        <div class="body" style="background-color: red;">
+                        </div>
+                        <div class="legs">
+                            <div class="leg"></div>
+                            <div class="leg"></div>
+                        </div>
+                    </div>
+                `,
+                cssSolution: ``
             },
-            // ... Добавьте больше уровней
         ];
 
         let currentLevel = 0;
 
-        // Функция обновления задания
-        function updateTask() {
-            const taskData = levels[currentLevel];
-            document.getElementById("task").textContent = taskData.task;
-            document.getElementById("htmlCode").value = taskData.htmlSolution || ""; // Очистка HTML поля при переходе на уровень
-            document.getElementById("jsCode").value = taskData.jsSolution || ""; // Очистка JS поля при переходе на уровень
+        function updateLevel() {
+            const levelData = levels[currentLevel];
+            document.getElementById("level-title").textContent = levelData.title;
+            document.getElementById("level-description").textContent = levelData.description;
         }
 
-        // Функция обновления кода в превью
-        function updatePreview() {
-            const htmlCode = document.getElementById("htmlCode").value;
-            const jsCode = document.getElementById("jsCode").value;
-            const iframe = document.getElementById("previewFrame");
-            iframe.srcdoc = `<!DOCTYPE html><html><head><title>Preview</title></head><body>${htmlCode}<script>${jsCode}</script></body></html>`;
+        function updateCodePreview() {
+            const htmlCode = document.getElementById("html-code").value;
+            const cssCode = document.getElementById("css-code").value;
+            document.getElementById("html-preview").textContent = htmlCode;
+            document.getElementById("css-preview").textContent = cssCode;
         }
 
-        // Обработчик события запуска
-        document.getElementById("runButton").addEventListener("click", updatePreview);
-
-        // Обработчик события переключения JavaScript
-        document.getElementById("jsToggle").addEventListener("click", () => {
-            const jsCodeContainer = document.getElementById("jsCodeContainer");
-            jsCodeContainer.style.display = jsCodeContainer.style.display === "none" ? "block" : "none";
-            const jsToggleBtn = document.getElementById("jsToggle");
-            jsToggleBtn.textContent = jsCodeContainer.style.display === "none" ? "Показать JavaScript" : "Скрыть JavaScript"; // Обновляем текст кнопки
-        });
-
-        // Обработчик события следующего уровня
-        document.getElementById("nextLevel").addEventListener("click", () => {
+        function nextLevel() {
             currentLevel = (currentLevel + 1) % levels.length;
-            updateTask();
-            document.getElementById("currentLevel").textContent = currentLevel + 1;
-        });
+            updateLevel();
+            // Очистка редакторов кода
+            document.getElementById("html-code").value = "";
+            document.getElementById("css-code").value = "";
+        }
 
-        // Инициализация игры
-        updateTask();
+        document.getElementById("next-level").addEventListener("click", nextLevel);
+        document.getElementById("html-code").addEventListener("input", updateCodePreview);
+        document.getElementById("css-code").addEventListener("input", updateCodePreview);
+
+        updateLevel();
     </script>
 </body>
 </html>
